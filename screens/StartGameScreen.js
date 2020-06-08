@@ -7,6 +7,7 @@ import {
   Button,
   Keyboard,
   Alert,
+  Dimensions,
 } from "react-native";
 
 import Card from "../components/Card";
@@ -148,7 +149,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   button: {
-    width: "40%",
+    // width: "40%",
+    /**
+     * this introduces the Dimensions API which in this case would calculate the
+     * dimensions of the actual window
+     */
+    width: Dimensions.get("window").width / 4,
   },
   input: {
     width: "10%",
