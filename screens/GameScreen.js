@@ -58,7 +58,25 @@ const GameScreen = (props) => {
   // we want to make a list of previous guesses
   const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
 
-  // const [rounds, setRounds] = useState(0);
+  const [availableDeviceHeight, setAvailableDeviceHeight] = useState(
+    Dimensions.get("window").height
+  );
+  const [availableDeviceWidth, setAvailableDeviceWidth] = useState(
+    Dimensions.get("window").width
+  );
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setAvailableDeviceHeight(Dimensions.get("window").height);
+      setAvailableDeviceWidth(Dimensions.get("window").width);
+    };
+
+    Dimensions.addEventListener("change", updateLayout);
+    // we use this cleanup function to remove an unnecessary re-renders
+    return () => {
+      Dimensions.removeEventListener("change", updateLayout);
+    };
+  });
 
   // this useEffect checks if the currentGuess and userChoice match
   useEffect(() => {
@@ -119,8 +137,49 @@ const GameScreen = (props) => {
 
   let listContainerStyle = styles.listContainer;
 
-  if (Dimensions.get("window").width < 350) {
+  if (availableDeviceWidth < 350) {
     listContainerStyle = styles.listContainerBig;
+  }
+
+  // this will render when the height of the screen is less than 500px
+  if (availableDeviceHeight < 500) {
+    return (
+      <View style={styles.screen}>
+        <Text style={defaultStyles.title}>Opponent's Guess</Text>
+        <View style={styles.controls}>
+          <MainButton onPress={() => nextGuessHandler("lower")}>
+            <Ionicons name="md-remove" size={24} color="white" />
+          </MainButton>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <MainButton onPress={() => nextGuessHandler("greater")}>
+            <Ionicons name="md-add" size={24} color="white" />
+          </MainButton>
+        </View>
+        <View style={listContainerStyle}>
+          {/* <ScrollView contentContainerStyle={styles.list}>
+          {pastGuesses.map((guess, index) => {
+            return renderListItem(guess, pastGuesses.length - index);
+          })}
+        </ScrollView> */}
+          {/** FlatList is a good when you don't know how long the list 
+          will be and will save on performance       
+          FlatList wants a key as a string and not a number  
+        */}
+          <FlatList
+            keyExtractor={(item) => item}
+            data={pastGuesses}
+            /** the parameter within the function of the renderItem prop
+             *  holds metadata passed from the data renders it into the list
+             *  and also hols index and separators as well
+             */
+            renderItem={(itemData) =>
+              renderListItem(pastGuesses.length, itemData)
+            }
+            contentContainerStyle={styles.list}
+          />
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -186,6 +245,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+  },
+  controls: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "80%",
   },
   // we have this list style that contains the list items
   listContainer: {

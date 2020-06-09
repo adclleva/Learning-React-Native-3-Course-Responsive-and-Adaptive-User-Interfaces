@@ -49,6 +49,7 @@ const StartGameScreen = (props) => {
     };
     // you don't want to keep adding event listeners when you render this component
     Dimensions.addEventListener("change", updateLayout);
+    // implementing the return Dimensions
     return () => {
       Dimensions.removeEventListener("change", updateLayout);
     };
