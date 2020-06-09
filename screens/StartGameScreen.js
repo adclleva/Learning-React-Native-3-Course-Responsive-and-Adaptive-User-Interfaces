@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -26,6 +26,10 @@ const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState();
+  // we manage the width when the orientation changes with state
+  const [buttonWidth, setButtonWidth] = useState(
+    Dimensions.get("window").width / 4
+  ); // this will be the default
 
   const numberInputHandler = (inputText) => {
     // this is sort of a validation to only have numbered inputs and not . or ,'s
@@ -37,6 +41,18 @@ const StartGameScreen = (props) => {
     setEnteredValue("");
     setConfirmed(false);
   };
+
+  useEffect(() => {
+    // We have a listener on the dimensions, this fires whenever the Dimensions change
+    const updateLayout = () => {
+      setButtonWidth(Dimensions.get("window").width / 4); // this will run whenever updateLayout runs
+    };
+    // you don't want to keep adding event listeners when you render this component
+    Dimensions.addEventListener("change", updateLayout);
+    return () => {
+      Dimensions.removeEventListener("change", updateLayout);
+    };
+  });
 
   const confirmInputHandler = () => {
     // This will be set as validations if it's a valid number between 1 and 99
@@ -105,14 +121,14 @@ const StartGameScreen = (props) => {
                 value={enteredValue}
               />
               <View style={styles.buttonContainer}>
-                <View style={styles.button}>
+                <View style={{ width: buttonWidth }}>
                   <Button
                     title="Reset"
                     color={Colors.accent}
                     onPress={resetInputHandler}
                   />
                 </View>
-                <View style={styles.button}>
+                <View style={{ width: buttonWidth }}>
                   <Button
                     color={Colors.primary}
                     title="Confirm"
@@ -160,7 +176,7 @@ const styles = StyleSheet.create({
      * this introduces the Dimensions API which in this case would calculate the
      * dimensions of the actual window
      */
-    width: Dimensions.get("window").width / 4,
+    // width: Dimensions.get("window").width / 4,
   },
   input: {
     width: "10%",
