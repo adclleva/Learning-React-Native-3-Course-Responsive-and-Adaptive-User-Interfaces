@@ -109,7 +109,7 @@ const StartGameScreen = (props) => {
           <View style={styles.screen}>
             <TitleText style={styles.title}>Start a New Game!</TitleText>
             <Card style={styles.inputContainer}>
-              <Text style={styles.title}>Select a New Games!</Text>
+              <Text style={styles.title}>Select a Number</Text>
               {/** here is where we implement the custom width to the input */}
               <Input
                 style={styles.input}
