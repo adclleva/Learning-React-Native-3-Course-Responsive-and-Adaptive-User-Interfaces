@@ -9,6 +9,8 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+
+import * as ScreenOrientation from "expo-screen-orientation"; // this object helps you detect screen orientation changes
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
 import DefaultStyles from "../constants/default-styles";
@@ -47,6 +49,8 @@ const renderListItem = (listLength, itemData) => {
 };
 
 const GameScreen = (props) => {
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+
   const { userChoice, onGameOver } = props;
 
   const initialGuess = generateRandomBetween(1, 100, userChoice);
