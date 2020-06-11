@@ -7,7 +7,15 @@ const Header = (props) => {
   const { title } = props;
 
   return (
-    <View style={styles.header}>
+    <View
+      style={{
+        ...styles.headerBase,
+        ...Platform.select({
+          ios: styles.headerIOS,
+          android: styles.headerAndroid,
+        }),
+      }}
+    >
       <TitleText style={styles.headerTitle}>{title}</TitleText>
     </View>
   );
@@ -15,15 +23,23 @@ const Header = (props) => {
 
 const styles = StyleSheet.create({
   // this will take the full width of the parent component
-  header: {
+  headerBase: {
     width: "100%",
     height: 90,
     paddingTop: 36,
-    backgroundColor: Platform.OS === "android" ? Colors.primary : "#fff",
     alignItems: "center",
     justifyContent: "center",
-    borderBottomColor: Platform.OS === "ios" ? "#ccc" : "transparent",
-    borderBottomWidth: Platform.OS === "ios" ? 1 : 0,
+  },
+  headerIOS: {
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
+    backgroundColor: "#fff",
+  },
+  headerAndroid: {
+    borderBottomColor: "transparent",
+    borderBottomWidth: 0,
+    backgroundColor: Colors.primary,
+    color: "#fff",
   },
   headerTitle: {
     color: Platform.OS === "ios" ? Colors.primary : "#fff",
