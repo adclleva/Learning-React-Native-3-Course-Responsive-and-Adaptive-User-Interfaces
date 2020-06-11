@@ -49,7 +49,7 @@ const renderListItem = (listLength, itemData) => {
 };
 
 const GameScreen = (props) => {
-  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+  // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT); // when the game starts, the orientation sticks to portrait mode
 
   const { userChoice, onGameOver } = props;
 
